@@ -1,0 +1,257 @@
+---
+title: "project"
+output:
+  word_document: default
+  html_document: default
+date: "2024-11-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+> library(readxl)
+> TB_Burden <- read_excel("master/Dissertacao2/TB_Burden.xlsx")
+> View(TB_Burden)
+ # Print the summary statistics
+> print(summary_stats)
+> # Create a table to present the results
+> library(knitr)
+> library(kableExtra)
+summary_table <- data.frame(
++     Variable = c("Total Population", "Prevalence of TB", "Number of Deaths from TB (excluding HIV)", "Number of Deaths from TB (HIV-positive)", "Number of Incident Cases", "HIV in Incident TB (percent)", "Incidence of TB cases who are HIV-positive", "Case Detection Rate"),
++     Mean = c(mean_total_population, mean_prevalence, ...),
++     SD = c(sd_total_population, sd_prevalence, ...),
++     Min = c(min_total_population, min_prevalence, ...),
++     Max = c(max_total_population, max_prevalence, ...)
++ )
+ sd_values <- sapply(TB_Burden, sd)
+ numeric_vars <- setdiff(names(TB_Burden), "Country")
+> sd_values <- sapply(TB_Burden[numeric_vars], sd, na.rm = TRUE)
+> print(sd_values)
+> install.packages("tidyverse")
+> install.packages
+> # Convert the 'Year' column to a date type
+> TB_Burden$Year <- as.Date(paste0(TB_Burden$Year, "-01-01"))
+> # Explore the data
+> head(TB_Burden)
+> summary(TB_Burden)
+# Plot a time series of the 'Total_population'
+> ggplot(TB_Burden, aes(x = Year, y = Total_population)) +
++     geom_line() +
++     labs(title = "Total Population Over Time", x = "Year", y = "Total Population")
+ library(dbplyr)
+ > library(ggplot2)
+> library(forecast)
+> # Check the structure of the dataset  
+> data <- TB_Burden 
+> # Create a time series object for the prevalence of TB  
+> ts_prevalence <- ts(data$`Prevalence of TB`, start = 1990, frequency = 1)  
+> # Plot the prevalence of TB over time  
+> ggplot(data, aes(x = Year, y = `Prevalence of TB`)) +  
++     geom_line(color = "blue") +  
++     labs(title = "Trends in TB Prevalence Over Years", x = "Year", y = "Prevalence of TB") +  
++     theme_minimal()
+> # Fit ARIMA model for prevalence of TB  
+> fit_prevalence <- auto.arima(ts_prevalence)  
+> forecasted_prevalence <- forecast(fit_prevalence, h = 15)  
+> 
+> # Plot the forecast for TB prevalence  
+> plot(forecasted_prevalence, main = "Forecast of TB Prevalence", xlab = "Year", ylab = "Prevalence of TB")  
+> # Fit ARIMA model for prevalence of TB  
+> fit_prevalence <- auto.arima(ts_prevalence)  
+> forecasted_prevalence <- forecast(fit_prevalence, h = 25)  
+> # Plot the forecast for TB prevalence  
+> plot(forecasted_prevalence, main = "Forecast of TB Prevalence", xlab = "Year", ylab = "Prevalence of TB")  
+> # Correlation with HIV-related variables  
+> correlation_hiv <- cor(data$`Prevalence of TB`, data$`HIV in incident TB (percent)`, use = "complete.obs")  
+> correlation_incidence <- cor(data$`Prevalence of TB`, data$`Incidence of TB cases who are HIV-positive`, use = "complete.obs")  
+> print(paste("Correlation between TB Prevalence and HIV in Incident TB (%):", correlation_hiv)) 
+> print(paste("Correlation between TB Prevalence and Incidence of TB cases who are HIV-positive:", correlation_incidence)) 
+> # Create time series objects for deaths  
+> ts_deaths_hiv_positive <- ts(data$`Number of deaths from TB ( HIV-positive)`, start = 1990, frequency = 1)  
+> ts_deaths_hiv_negative <- ts(data$`Number of deaths from TB (excluding HIV)`, start = 1990, frequency = 1)  
+> # Plotting both series together for comparison  
+> plot(ts_deaths_hiv_positive, col = "red", ylim = range(0, max(ts_deaths_hiv_positive, ts_deaths_hiv_negative)),   
++      main = "TB Deaths: HIV-positive vs HIV-negative", xlab = "Year", ylab = "Number of Deaths")  
+> lines(ts_deaths_hiv_negative, col = "blue")  
+> legend("topright", legend = c("HIV-positive", "HIV-negative"), col = c("red", "blue"), lty = 1)  
+> 
+> # Fit ARIMA models for both death types  
+> fit_deaths_hiv_positive <- auto.arima(ts_deaths_hiv_positive)  
+> fit_deaths_hiv_negative <- auto.arima(ts_deaths_hiv_negative)
+> # Forecast for the next 25 years  
+> forecasted_deaths_hiv_positive <- forecast(fit_deaths_hiv_positive, h = 25)  
+> forecasted_deaths_hiv_negative <- forecast(fit_deaths_hiv_negative, h = 25) 
+> # Plot the forecasts  
+> par(mfrow = c(1, 2))  
+> plot(forecasted_deaths_hiv_positive, main = "Forecast of TB Deaths (HIV-positive)", xlab = "Year", ylab = "Number of Deaths")  
+> plot(forecasted_deaths_hiv_negative, main = "Forecast of TB Deaths (HIV-negative)", xlab = "Year", ylab = "Number of Deaths")  
+> # Calculate cross-correlation between TB prevalence and HIV in incident TB  
+> ccf(data$`Prevalence of TB`, data$`HIV in incident TB (percent)`, lag.max = 10, main = "Cross-Correlation: TB Prevalence and HIV in Incident TB") 
+> # Calculate cross-correlation between TB prevalence and incidence of TB cases who are HIV-positive  
+> ccf(data$`Prevalence of TB`, data$`Incidence of TB cases who are HIV-positive`, lag.max = 10, main = "Cross-Correlation: TB Prevalence and Incidence of HIV-positive TB Cases")  
+> # Fit the multiple linear regression model (if you haven't already)
+> model <- lm(Number.of.incident.cases ~ Total.population + Prevalence.of.TB + 
++                 Number.of.deaths.from.TB..excluding.HIV. + 
++                 Number.of.deaths.from.TB...HIV.positive. + 
++                 HIV.in.incident.TB..percent. + 
++                 Incidence.of.TB.cases.who.are.HIV.positive + 
++                 Case.detection.rate..percent, data = TB_Burden)
+> # 1. Linearity
+> # Plot residuals against each predictor
+> predictors <- c("Total.population", "Prevalence.of.TB", 
++                 "Number.of.deaths.from.TB..excluding.HIV.",
++                 "Number.of.deaths.from.TB...HIV.positive.",
++                 "HIV.in.incident.TB..percent.",
++                 "Incidence.of.TB.cases.who.are.HIV.positive",
++                 "Case.detection.rate..percent.")
+> # 2. Normality of residuals
+> # Histogram of residuals
+> hist(model$residuals, main = "Histogram of Residuals", xlab = "Residuals")
+> # Q-Q plot of residuals
+> qqnorm(model$residuals)
+> qqline(model$residuals)
+> # Shapiro-Wilk test for normality
+> shapiro.test(model$residuals)
+> # 3. Homoscedasticity
+> # Plot residuals against fitted values
+> plot(model$fitted.values, model$residuals, 
++      xlab = "Fitted Values", ylab = "Residuals",
++      main = "Residuals vs. Fitted   
++  Values")
+> abline(h = 0, lty = 2)  # Add a horizontal line at zero
+> # Breusch-Pagan test for homoscedasticity
+> library(lmtest)
+> bptest(model) 
+> install.packages("flextable")
+> # Cross-correlations  
+> ccf(TB_Burden$`Prevalence of TB`, TB_Burden$`HIV in incident TB (percent)`,   
++     lag.max = 10, main = "Cross-Correlation: TB Prevalence and HIV in Incident TB") 
+> ccf(TB_Burden$`Prevalence of TB`, TB_Burden$`Incidence of TB cases who are HIV-positive`,   
++     lag.max = 10, main = "Cross-Correlation: TB Prevalence and Incidence of HIV-positive TB Cases")  
+> dev.off()  # Close the device
+> # Convert columns to numeric if they are not already  
+> TB_Burden$Prevalence.of.TB <- as.numeric(TB_Burden$Prevalence.of.TB)  
+> TB_Burden$Number.of.deaths.from.TB..excluding.HIV. <- as.numeric(TB_Burden$Number.of.deaths.from.TB..excluding.HIV.)  
+> TB_Burden$Number.of.deaths.from.TB...HIV.positive. <- as.numeric(TB_Burden$Number.of.deaths.from.TB...HIV.positive.)  
+> # Fit ARIMA models for each variable using the Year column for the ts() function  
+> fit_prevalence <- auto.arima(ts(TB_Burden$Prevalence.of.TB, start = min(TB_Burden$Year), frequency = 1))  
+> fit_deaths_hiv_positive <- auto.arima(ts(TB_Burden$Number.of.deaths.from.TB...HIV.positive., start = min(TB_Burden$Year), frequency = 1))  
+> fit_deaths_hiv_negative <- auto.arima(ts(TB_Burden$Number.of.deaths.from.TB..excluding.HIV., start = min(TB_Burden$Year), frequency = 1))  
+> 
+> # Print summaries of the models  
+> summary(fit_prevalence) 
+> summary(fit_deaths_hiv_positive) 
+> summary(fit_deaths_hiv_negative)  
+> summary(fit_deaths_hiv_positive)
+> summary(fit_deaths_hiv_negative)
+> # Select only the relevant numeric columns for correlation analysis  
+> numeric_columns <- TB_Burden[, c("Prevalence.of.TB",   
++                                  "Number.of.deaths.from.TB..excluding.HIV.",   
++                                  "Number.of.deaths.from.TB...HIV.positive.",   
++                                  "Number.of.incident.cases",   
++                                  "HIV.in.incident.TB..percent.",   
++                                  "Incidence.of.TB.cases.who.are.HIV.positive",   
++                                  "Case.detection.rate..percent")]  
+> # Calculate the Pearson correlation matrix  
+> correlation_matrix <- cor(numeric_columns, use = "complete.obs", method = "pearson") 
+> # Print the correlation matrix  
+> print(correlation_matrix)
+> # Optional: Visualize the correlation matrix using heatmap  
+> library(ggplot2)  
+> library(reshape2)  
+> 
+> # Melt the correlation matrix for visualization  
+> melted_correlation_matrix <- melt(correlation_matrix)
+> # Create a heatmap  
+> ggplot(data = melted_correlation_matrix, aes(x = Var1, y = Var2, fill = value)) +  
++     geom_tile() +  
++     scale_fill_gradient2(low = "blue", high = "red", mid = "white",   
++                          midpoint = 0, limit = c(-1, 1),   
++                          name = "Pearson Correlation") +  
++     theme_minimal() +  
++     labs(title = "Pearson Correlation Matrix", x = "Variables", y = "Variables") +  
++     theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+> library(tidyverse)
+> library(psych)
+> # Fit a Multiple Linear Regression Model  
+> model <- lm(Number.of.deaths.from.TB..excluding.HIV. ~ Prevalence.of.TB + Number.of.deaths.from.TB...HIV.positive. +   
++                 Number.of.incident.cases + HIV.in.incident.TB..percent. +   
++                 Incidence.of.TB.cases.who.are.HIV.positive + Case.detection.rate..percent,   
++             data = TB_Burden) 
+> # Summarize the model  
+> summary(model)
+> # Assume the relevant columns are in character format, we convert them to numeric  
+> TB_Burden <- TB_Burden %>%  
++     mutate(  
++         Total.population = as.numeric(Total.population),  
++         Prevalence.of.TB = as.numeric(Prevalence.of.TB),  
++         Number.of.deaths.from.TB..excluding.HIV. = as.numeric(Number.of.deaths.from.TB..excluding.HIV.),  
++         Number.of.deaths.from.TB...HIV.positive. = as.numeric(Number.of.deaths.from.TB...HIV.positive.),  
++         Number.of.incident.cases = as.numeric(Number.of.incident.cases),  
++         HIV.in.incident.TB..percent. = as.numeric(HIV.in.incident.TB..percent.),  
++         Incidence.of.TB.cases.who.are.HIV.positive = as.numeric(Incidence.of.TB.cases.who.are.HIV.positive),  
++         Case.detection.rate..percent. = as.numeric(Case.detection.rate..percent.)  
++     )  
+> # Fit the Multiple Linear Regression model  
+> model <- lm(Number.of.incident.cases ~ Prevalence.of.TB +   
++                 Number.of.deaths.from.TB..excluding.HIV. +   
++                 Number.of.deaths.from.TB...HIV.positive. +   
++                 HIV.in.incident.TB..percent. +   
++                 Incidence.of.TB.cases.who.are.HIV.positive +   
++                 Case.detection.rate..percent,  
++             data = TB_Burden)  
+> # Get the model summary  
+> model_summary <- summary(model)  
+> # Print R and R squared values  
+> cat("R-squared:", model_summary$r.squared, "\n")
+> cat("Adjusted R-squared:", model_summary$adj.r.squared, "\n") 
+> # Coefficients and Significance of the Variables  
+> cat("Coefficients and their significance:\n")
+> print(model_summary$coefficients) 
+> # Significance Test (t Test)  
+> cat("\nP-values for coefficients:\n")  
+> print(model_summary$coefficients[, 4]) # P-values for the coefficients
+> library(car)
+> # Get coefficients and p-values
+> coef_summary <- coef(summary(model))
+> # Print the coefficients and p-values in a table format
+> cat("Coefficients and their significance:\n")
+Coefficients and their significance:
+> print(coef_summary)
+> # Extract R-squared and Adjusted R-squared from summary
+> r_squared <- summary(model)$r.squared
+> adjusted_r_squared <- summary(model)$adjusted.r.squared
+> # Print the values
+> cat("R-squared:", r_squared, "\n")
+> # Fit the model (assuming your data is in a dataframe named TB_Burden)
+> model <- lm(Number.of.incident.cases ~ Total.population + Prevalence.of.TB + 
++                 Number.of.deaths.from.TB..excluding.HIV. + 
++                 Number.of.deaths.from.TB...HIV.positive. + 
++                 HIV.in.incident.TB..percent. + 
++                 Incidence.of.TB.cases.who.are.HIV.positive + 
++                 Case.detection.rate..percent, data = TB_Burden)
+> 
+> # Get summary statistics (including Adjusted R-squared)
+> summary(model)
+
